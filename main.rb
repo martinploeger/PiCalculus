@@ -3,7 +3,7 @@ require 'pi_calculus'
 # p PiCalculus.new { a.(b+c+d|e.tau) }.a.transitions
 
 p = PiCalculus.new do
-  
+  a+b
 end
 
-p p.transitions
+p p.b.transitions

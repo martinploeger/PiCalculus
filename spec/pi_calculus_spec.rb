@@ -7,7 +7,7 @@ describe PiCalculus do
 
   it "should be empty" do
     PiCalculus.new.transitions.should be_empty
-    PiCalculus.new.to_s.should == '∅'
+    PiCalculus.new.to_s.should == ''
   end
 
   it "should have one transition" do
@@ -96,7 +96,7 @@ describe PiCalculus do
 
   it "should execute communicating pairs in parallelity automatically" do
     p = PiCalculus.new { a!|a? }
-    p.a!.to_s.should == '∅'
+    p.a!.to_s.should == ''
     p.transitions.should be_empty
   end
 
@@ -104,9 +104,9 @@ describe PiCalculus do
     p = PiCalculus.new(:wait) { a.b.tau.tau.c }
     p.transitions.should == [:a]
     p.a.transitions.should == [:b]
-    p.b.transitions.should == [:τ]
-    p.tau.transitions.should == [:τ]
-    p.τ.transitions.should == [:c]
+    p.b.transitions.should == [:tau]
+    p.tau.transitions.should == [:tau]
+    p.tau.transitions.should == [:c]
     p.c.transitions.should be_empty
   end
 
@@ -159,15 +159,15 @@ describe PiCalculus do
   it "should make resticted 'communicatable' values tau-switchable when not executing taus directly" do
     p = PiCalculus.new(:wait) { a.nu(:b, :c, b!|b?|c!|c).d }
     p.transitions.should == [:a]
-    p.a.transitions.should == [:τ, :τ]
-    p.τ.tau.transitions.should == [:d]
+    p.a.transitions.should == [:tau, :tau]
+    p.tau.tau.transitions.should == [:d]
     p.d.transitions.should be_empty
   end
 
   it "should be able to solve complex processes" do
-    p = PiCalculus.new(:wait) { tau.τ.a._(b+c+d|e).f }
-    p.transitions.should == [:τ]
-    p.τ.transitions.should == [:τ]
+    p = PiCalculus.new(:wait) { tau.tau.a._(b+c+d|e).f }
+    p.transitions.should == [:tau]
+    p.tau.transitions.should == [:tau]
     p.tau.transitions.should == [:a]
     p.a.transitions.should have(4).entries
     p.transitions.should include(:b, :c, :d, :e)

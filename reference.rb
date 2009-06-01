@@ -12,7 +12,7 @@ class Reference
   end
   
   def to_s
-    previous.is_a?(PiProcess) ? pi_calculus[name].to_s : "#{name}#{".#{self.next}" if self.next}"
+    previous.is_a?(PiProcess) ? pi_calculus[self.name].to_s : "#{name}#{".#{self.next}" if self.next}"
   end
 
 end

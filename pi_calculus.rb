@@ -18,16 +18,23 @@ class PiCalculus
     remove_instance_variable :@definition
   end
   
+  def[] index
+    case index
+      when Integer        then @processes[index] || raise("Kein Prozess mit Index '#{index}' vorhanden.")
+      when String, Symbol then @meta.const_defined?(index) ? @meta.const_get(index) : raise("Kein Prozess mit Namen '#{index}' vorhanden.")
+    end
+  end
+  
+  def to_s
+    processes.collect { |p| (match = @meta.constants.find { |c| @meta.const_get(c) == p }) ? "#{match} = #{p}" : p }.join "\n"
+  end
+  
   def method_missing name, *args, &block
     if definition
       (processes << PiProcess.new(self).send(name, *args, &block)).last
     else
       #TODO
     end
-  end
-  
-  def to_s
-    processes.collect { |p| (match = @meta.constants.find { |c| @meta.const_get(c) == p }) ? "#{match} = #{p}" : p }.join "\n"
   end
   
 end

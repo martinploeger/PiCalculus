@@ -10,4 +10,8 @@ class PiProcess
     self.next.to_s
   end
   
+  def []
+    @pi_calculus
+  end
+  
 end

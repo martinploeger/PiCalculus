@@ -84,33 +84,7 @@ p process.transitions
 # x = Person.new
 # Klaus = 123
 # Process( {x => :Klaus})  { a{Klaus.name}.b.c}
-# 
-# 
-# 
-# 
-# 
-# concurrent(this.a(), this.b()).this.c();
-# 
-# 
-# process = a{x.a; y.delete}|b{x.b}.c{self.c}
-# 
-# def process.a2
-#   puts "hihi"
-# end
-# 
-# def b
-#   puts "hoho"
-# end
-# 
-# def c
-#   puts "hehe"
-# end
-# 
-# (a|b).c
-# 
-# 
-# a+b
-# 
+
 # 
 # 
 # 

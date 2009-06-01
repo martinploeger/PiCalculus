@@ -3,11 +3,11 @@ class PiProcess
   include Expression
   
   def initialize pi_calculus
-    @pi_calculus = pi_calculus
+    self.pi_calculus = pi_calculus
   end
   
-  def []
-    @pi_calculus
+  def to_s
+    self.next.to_s
   end
   
 end

@@ -1,9 +1,9 @@
 # encoding: utf-8
 require 'pi_calculus'
-# p PiCalculus.new { a.(b+c+d|e.tau) }.a.transitions
 
 p = PiCalculus.new do
-  a+b
+  P1 = a.(b+c).d.e!|e?
+  P2 = z.(x|self.P1).hallo.P2
 end
 
-p p.b.transitions
+puts p

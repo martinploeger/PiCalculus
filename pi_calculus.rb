@@ -1,16 +1,17 @@
 # encoding: utf-8
-%w{expression pi_process reference causality restriction alternative parallelity}.each { |l| require File.expand_path(File.dirname(__FILE__) + '/' + l) }
+%w{expression pi_process pi_instance variable_binding reference causality restriction alternative parallelity}.each { |l| require File.expand_path(File.dirname(__FILE__) + '/' + l) }
 
-#TODO: Prozessdefinitionen nach der Definition merken und nicht mehr verändern
-#TODO: Prozessbeispiele PiCalculus als Vorlage nehmen
+#TODO: VariableBindings bei Referenzen verwenden
+#TODO: []= anders implementieren, damit es auch für Formalparameter in Ausdrücken wie x!(:z)|x?[:a].a! verwendet werden kann
 
 class PiCalculus
   
-  attr_reader :definition, :processes
+  attr_reader :definition
+  attr_accessor :processes
   
   def initialize &block
     @definition = true
-    @processes = []
+    self.processes = []
     @meta = class << self; self; end
     @meta.instance_variable_set :@self, self
     def @meta.const_missing name; @self.send name; end
@@ -18,15 +19,12 @@ class PiCalculus
     remove_instance_variable :@definition
   end
   
-  def[] index
-    case index
-      when Integer        then @processes[index] || raise("Kein Prozess mit Index '#{index}' vorhanden.")
-      when String, Symbol then @meta.const_defined?(index) ? @meta.const_get(index) : raise("Kein Prozess mit Namen '#{index}' vorhanden.")
-    end
+  def [] index
+    @meta.const_get index
   end
   
   def to_s
-    processes.collect { |p| (match = @meta.constants.find { |c| @meta.const_get(c) == p }) ? "#{match} = #{p}" : p }.join "\n"
+    processes.collect { |p| (match = @meta.constants.find { |c| @meta.const_get(c) == p }) ? "#{match}#{"[#{p.args.join ', '}]" unless p.args.empty?} = #{p}" : p } * "\n"
   end
   
   def method_missing name, *args, &block

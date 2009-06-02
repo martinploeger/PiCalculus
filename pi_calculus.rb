@@ -12,19 +12,22 @@ class PiCalculus
   def initialize &block
     @definition = true
     self.processes = []
-    @meta = class << self; self; end
-    @meta.instance_variable_set :@self, self
-    def @meta.const_missing name; @self.send name; end
+    meta.instance_variable_set :@self, self
+    def meta.const_missing name; @self.send name; end
     self.instance_eval &block if block
     remove_instance_variable :@definition
   end
   
+  def meta
+    class << self; self; end
+  end
+  
   def [] index
-    @meta.const_get index
+    meta.const_get index
   end
   
   def to_s
-    processes.collect { |p| (match = @meta.constants.find { |c| @meta.const_get(c) == p }) ? "#{match}#{"[#{p.args.join ', '}]" unless p.args.empty?} = #{p}" : p } * "\n"
+    processes.collect { |p| (match = meta.constants.find { |c| meta.const_get(c) == p }) ? "#{match}#{"[#{p.args.join ', '}]" unless p.args.empty?} = #{p}" : p } * "\n"
   end
   
   def method_missing name, *args, &block

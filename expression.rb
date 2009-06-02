@@ -16,22 +16,22 @@ module Expression
       last = last.next while (last ||= self).next
       result = self
       case name
-        when /^[A-Z].*$/ then last.next = Reference.new(pi_calculus, name, last, *args)
-        when :[]=        then pi_calculus.processes.delete self
-                              pi_calculus.processes.delete args.last
-                              result = pi_calculus.instance_variable_get(:@meta).const_set last.name, PiProcess.new(pi_calculus, nil, nil, *args[0...-1])
-                              result.next = args.last.next
-                              args.last.next.previous = result
-                              pi_calculus.processes << result
-        when :call       then pi_calculus.processes.delete args.first
-                              last.next = args.first.next
-                              args.first.previous = last
-        when :+, :|      then pi_calculus.processes.delete args.first
-                              (name == :+ ? Alternative : Parallelity).new pi_calculus, self, self.next, *args.collect { |a| a.is_a?(PiProcess) ? a.next : a }
-        when :nu, :ν     then root = root.previous while (root ||= args.last).previous 
-                              pi_calculus.processes.delete root
-                              last.next = Restriction.new pi_calculus, last, *args.collect { |a| a.is_a?(PiProcess) ? a.next : a }
-                         else last.next = Causality.new pi_calculus, name, last, *args
+        when /^[A-Z]/ then last.next = Reference.new pi_calculus, name, last, *args
+        when :[]=     then pi_calculus.processes.delete self
+                           pi_calculus.processes.delete args.last
+                           result = pi_calculus.meta.const_set last.name, PiProcess.new(pi_calculus, nil, nil, *args[0...-1])
+                           result.next = args.last.next
+                           args.last.next.previous = result
+                           pi_calculus.processes << result
+        when :call    then pi_calculus.processes.delete args.first
+                           last.next = args.first.next
+                           args.first.previous = last
+        when :+, :|   then pi_calculus.processes.delete args.first
+                           (name == :+ ? Alternative : Parallelity).new pi_calculus, self, self.next, *args.collect { |a| a.is_a?(PiProcess) ? a.next : a }
+        when :nu      then root = root.previous while (root ||= args.last).previous 
+                           pi_calculus.processes.delete root
+                           last.next = Restriction.new pi_calculus, last, *args.collect { |a| a.is_a?(PiProcess) ? a.next : a }
+                      else last.next = Causality.new pi_calculus, name, last, *args
       end
       result
     else

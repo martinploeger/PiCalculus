@@ -7,7 +7,7 @@ module Expression
     if pi_calculus.definition
       last = last.next while (last ||= self).next
       case name
-        when /^[A-Z].*$/ then last.next = Reference.new(name, pi_calculus, last)
+        when /^[A-Z].*$/ then last.next = Reference.new(name, pi_calculus, last, args)
         when :call       then pi_calculus.processes.delete args.first
                               last.next = args.first.next
                               args.first.previous = last
@@ -16,7 +16,7 @@ module Expression
         when :nu, :ν     then root = root.previous while (root ||= args.last).previous 
                               pi_calculus.processes.delete root
                               last.next = Restriction.new pi_calculus, last, *args.collect { |a| a.is_a?(PiProcess) ? a.next : a }
-                         else last.next = Causality.new name, pi_calculus, last
+                         else last.next = Causality.new name, pi_calculus, last, args
       end
       self
     else

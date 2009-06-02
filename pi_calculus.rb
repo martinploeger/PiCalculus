@@ -1,8 +1,12 @@
 # encoding: utf-8
 %w{expression pi_process pi_instance variable_binding reference causality restriction alternative parallelity}.each { |l| require File.expand_path(File.dirname(__FILE__) + '/' + l) }
 
+#Modellebene:
 #TODO: VariableBindings bei Referenzen verwenden
 #TODO: []= anders implementieren, damit es auch für Formalparameter in Ausdrücken wie x!(:z)|x?[:a].a! verwendet werden kann
+
+#Instanzebene:
+#TODO: Prozesse ausführbar machen
 
 class PiCalculus
   

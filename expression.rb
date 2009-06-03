@@ -17,6 +17,7 @@ module Expression
       result = self
       case name
         when /^[A-Z]/ then last.next = Reference.new pi_calculus, name, last, *args
+        when :[]      then #TODO
         when :[]=     then pi_calculus.processes.delete self
                            pi_calculus.processes.delete args.last
                            result = pi_calculus.meta.const_set last.name, PiProcess.new(pi_calculus, nil, nil, *args[0...-1])

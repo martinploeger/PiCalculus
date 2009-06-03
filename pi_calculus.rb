@@ -3,7 +3,7 @@
 
 #Modellebene:
 #TODO: VariableBindings bei Referenzen verwenden
-#TODO: []= anders implementieren, damit es auch für Formalparameter in Ausdrücken wie x!(:z)|x?[:a].a! verwendet werden kann
+#TODO: Differenzieren zwischen Formal- und Aktualparametern => wie?
 
 #Instanzebene:
 #TODO: Prozesse ausführbar machen
